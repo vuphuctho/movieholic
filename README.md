@@ -15,9 +15,15 @@ You must have CLIPS to run the program. The software can be downloaded here: htt
 
 Clone the repository to your local machine.
 
-In CLIPS console, call the file main.bat by typing: (batch "your_directory/main.bat")
+In CLIPS console, call the file main.bat by typing: 
+```
+(batch "your_directory/main.bat")
+```
 
-For example: if the file main.bat is inside folder repo/movieholic then call: (batch "repo/movieholic/main.bat")
+For example: if the file main.bat is inside folder repo/movieholic then call: 
+```
+(batch "repo/movieholic/main.bat")
+```
 
 Process of searching:
 =====================
