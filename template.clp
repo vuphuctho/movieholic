@@ -12,7 +12,7 @@
 
 ;; question template
 (deftemplate question
-	(multislot word (type STRING)))
+	(slot event (type STRING)))
 
 ;; result template
 (deftemplate result
