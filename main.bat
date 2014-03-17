@@ -7,6 +7,7 @@
 ;; remember to pass the whole link to the files
 (load "repo/movieholic/template.clp")
 (load "repo/movieholic/fact.clp")
+(load "repo/movieholic/function.clp")
 (load "repo/movieholic/ui.clp")
 (printout t "testing main.bat" crlf)
 
