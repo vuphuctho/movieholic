@@ -2,7 +2,8 @@
 
 ;; Ask user for keywords for one event in movie
 (defrule ask-event
-	(not (result))
+	;;(not (result))
+	(phase (event firstQuestion))
 	=>
 	(printout t "Welcome to Movieholic - an application for any holic of movie!" crlf)
 	(printout t "First, we need some information to find your favorite movie" crlf)
@@ -19,5 +20,11 @@
 	)
 )
 
+
 ;;TODO John to add interaction with user. 
 ;;TODO 2: add a chart
+;; Ask-event
+;; is-result-correct?
+;;  (yes) try again?        (no) ask from list
+;;                          (yes) exit       (no) ask for keywords
+;;                                           (yes)ok  (no) sorry!
