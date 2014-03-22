@@ -19,3 +19,5 @@
 	)
 )
 
+;;TODO John to add interaction with user. 
+;;TODO 2: add a chart
