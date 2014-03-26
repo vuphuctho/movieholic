@@ -14,21 +14,21 @@
 	)
 )
 
-;; SEMI-DONE: To return results as a list
+;; JOHN : To return results as a list
 ;; get top result
 (defrule get-result
 	(not (keyword (check ?t&: (= ?t 0))))
 	(movie (movieName ?name) (similarity ?sim))
 	(not (movie (similarity ?other_sim&: (> ?other_sim ?sim ))))
 	=>
-	(assert (result (movieName ?name "otherResults" )))
+	(assert (result (movieName ?name "otherResults1")))
 )
 
 
 ;; TODO: Remove this and put a corresponding title in UI
 ;; print result
-(defrule print-result
-	(result (movieName ?firstMovie $?))
-	=>
-	(printout t "The movie you are looking for is: " ?firstMovie "." crlf)
-)	
+;;(defrule print-result
+;;	(result (movieName ?firstMovie $?))
+;;	=>
+;;	(printout t "The movie you are looking for is: " ?firstMovie "." crlf)
+;;)	

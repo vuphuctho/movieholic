@@ -14,6 +14,7 @@
 	;; (keyword (word "") (movieName "") (number ))
 	
 	;; facts to set-up user-interface
-	(phase (event firstQuestion))
+	;; UI_Welcome UI_TopResult, UI_OtherResults, UIMoreKeywords, UIFoundMovie
+	(phase (event UI_Welcome))
 )
 
