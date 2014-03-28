@@ -1,7 +1,7 @@
 ;; User Interface Rules
 
 ;; Ask user for keywords for one event in movie
-(defrule ask-event
+(defrule ask-for-keyword
 	(not (result))
 	=>
 	(printout t "Welcome to Movieholic - an application for any holic of movie!" crlf)
@@ -11,11 +11,15 @@
 	(if (= (str-length ?n) 0)
 		then 
 			(printout t "Sorry, we need some information to start processing ***" crlf crlf)
+			(reset)
 			(run) 
 	)
 	(if (> (str-length ?n) 0)
 		then 
 			(assert (question (event ?n)))
 	)
+)
+
+(defrule ask-for-keyword-existence
 )
 
