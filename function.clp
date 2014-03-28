@@ -1,16 +1,24 @@
 ;; Functions
 
-
 ;; STEP 1: QUERY PREPROCESSING
 
 ;; STEP 2: TEXT-MATCHING AND SIMILARITY MEASUREMENT	
-;; simple text matching
+;; Rule: text matching
+;; Premise: if there exists query, find an unchecked keyword (check = 0)
+;; and its corresponding movie
+;; Action: 1) Match keyword as checked (check = 1)
+;; 		   2) If keyword appears in query, modify similarity value of movie
+;; Note: modifying rule: term correlation
 (defrule text-matching
 	(question (event ?x))
 	?movie <- (movie (movieName ?z) (similarity ?w))
 	?keyword <- (keyword (word ?y) (movieName ?z) (number ?no) (check ?t&: (= ?t 0)))	
 	=>
-	(modify ?keyword (check 1)) ;; checked already
+	;; Match keyword as checked 
+	(modify ?keyword (check 1))
+
+	;; If find keyword in query
+	;; modify similarity value of movie having this keyword
 	(if (str-index ?y ?x)
 		then	
 		(modify ?movie (similarity (+ ?w ?no)))
