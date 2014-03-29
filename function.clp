@@ -30,7 +30,7 @@
 ;; JOHN : To return results as a list
 ;; get top result
 (defrule get-result
-		(phase (event UI_TopResult))
+		;;(phase (event UI_TopResult))
 		?result <- (result (movieName $?names) (loop ?l))
 		(not (keyword (check 0)))
 		?movie <- (movie (movieName ?name) (inResult 0) (similarity ?sim))
@@ -38,12 +38,14 @@
 		=>
 		(if (> ?sim 0)
 			then
+			;;(printout t "The movie " ?name " is added to the result list" crlf)
 			(modify ?movie (inResult 1))
 			(if (= (length$ $?names) 0)
 				then 
-				(assert (result (movieName ?name) (loop (+ ?l 1))))
-				
+				;;(printout t "Length of result list: " (length$ $?names) crlf)		
+				(assert (result (movieName ?name) (loop (+ ?l 1))))				
 				else 
+				;;(printout t "Length of result list: " (length$ $?names) crlf)
 				(assert (result (movieName $?name ?name) (loop (+ ?l 1))))
 			)
 			(retract ?result)
