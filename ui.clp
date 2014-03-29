@@ -86,7 +86,7 @@
 (defrule UIrecievedKeywords
 	?phase <- (phase (event UI_MoreKeywords))
 	(not (movie (similarity 0)))
-	(not (keywords (check 0)))
+	(not (keyword (check 0)))
 	=>
 	(modify ?phase (event UI_TopResult))
 )

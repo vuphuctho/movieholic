@@ -39,7 +39,7 @@
 		;;(slot-insert$ movie movieName 10 ?name)
 		(printout "Fire rule get-result" crlf)
 		(modify ?movie (inResult 1))
-		(if (= ?result nil)
+		(if (not (?result))
 			then 
 				(printout t "Get here" crlf)
 				(assert (result (movieName ?name)))
