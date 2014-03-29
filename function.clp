@@ -37,14 +37,22 @@
 		(not (movie (inResult ?j &: (= ?j 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
 		=>
 		;;(slot-insert$ movie movieName 10 ?name)
+		(printout "Fire rule get-result" crlf)
 		(modify ?movie (inResult 1))
-		(if (= (length$ $?names) 0 )
+		(if (= ?result nil)
 			then 
+				(printout t "Get here" crlf)
 				(assert (result (movieName ?name)))
 			else 
-				(assert (result (movieName $?names ?name)))
-		)
+				(if (= (length$ $?names) 0 )
+					then 
+						(assert (result (movieName ?name)))
+					else 
+						(assert (result (movieName $?names ?name)))
+				)
 		(retract ?result)
+		)
+		
 
 
 
