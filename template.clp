@@ -3,6 +3,7 @@
 ;; movie templates
 (deftemplate movie
 	(slot movieName (type STRING))
+	(slot inResult (type NUMBER) (default 0))
 	(slot similarity (type NUMBER) (default 0)))
 
 ;; keyword template

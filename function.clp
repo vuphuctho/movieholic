@@ -29,11 +29,16 @@
 ;; JOHN : To return results as a list
 ;; get top result
 (defrule get-result
-	(not (keyword (check ?t&: (= ?t 0))))
-	(movie (movieName ?name) (similarity ?sim))
-	(not (movie (similarity ?other_sim&: (> ?other_sim ?sim ))))
-	=>
-	(assert (result (movieName ?name "otherResults1")))
+	(loop-for-count 10
+		(not (keyword (check ?t&: (= ?t 0))))
+		?movie <- (movie (movieName ?name) (inResult ?t& (= ?t 0)) (similarity ?sim))
+		(not (movie (inResult ?s& (= ?s 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
+		=>
+		(slot-insert$ movie movieName 10 ?name)
+		(modify ?movie (inResult 1))
+		;;(assert (result (movieName ?name "otherResults1")))
+	)
+	
 )
 
 

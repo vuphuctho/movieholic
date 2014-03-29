@@ -71,6 +71,7 @@
 	)
 	(if (> (str-length ?newQuery) 0) then 
 		(modify ?question (event (str-cat ?newQuery(str-cat " " ?originalQuery))))
+		;; this cant work since all keywords are checked
 	)
 )
 
