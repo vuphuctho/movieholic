@@ -29,15 +29,21 @@
 ;; JOHN : To return results as a list
 ;; get top result
 (defrule get-result
-	(loop-for-count 10
+	;;(loop-for-count 10
+		?result <- (result (movieName $?names))
 		(not (keyword (check ?t&: (= ?t 0))))
-		?movie <- (movie (movieName ?name) (inResult ?t& (= ?t 0)) (similarity ?sim))
-		(not (movie (inResult ?s& (= ?s 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
+		?movie <- (movie (movieName ?name) (inResult ?i &: (= ?i 0)) (similarity ?sim))
+		(not (movie (inResult ?j &: (= ?j 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
 		=>
 		(slot-insert$ movie movieName 10 ?name)
 		(modify ?movie (inResult 1))
+		(if (= (length$ $?name) 0)
+			then 
+			else 
+			(assert (result (movieName ?name)))
+		) 
 		;;(assert (result (movieName ?name "otherResults1")))
-	)
+	;;)
 	
 )
 
@@ -45,9 +51,11 @@
 ;; TODO: Remove this and put a corresponding title in UI
 ;; print result
 (defrule print-result
-	(result (movieName ?name))
+	(result (movieName ?name $?other-names))
 	=>
-	(printout t "The movie you are looking for is: " ?name "." crlf)
+	(printout t "The movie you are looking for is: ")
+	(printout t ?name crlf)
+	
 )	
 
 ;; STEP 4: Further process to narrow down result's list

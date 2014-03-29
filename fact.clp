@@ -16,5 +16,7 @@
 	;; facts to set-up user-interface
 	;; UI_Welcome UI_TopResult, UI_OtherResults, UIMoreKeywords, UIFoundMovie
 	(phase (event UI_Welcome))
+
+	(result)
 )
 
