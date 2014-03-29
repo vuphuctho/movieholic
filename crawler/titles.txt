@@ -1,5 +1,5 @@
-Robocop||Spoilers/Robocop2014.html
-The Wolf of Wall Street||Spoilers/wolfofwallstreet.html
-American Hustle||Spoilers/AmericanHustle.html
-Endless Love||Spoilers/EndlessLove2014.html
-Lone Survivor||Spoilers/LoneSurvivor.html
+Philomena||Spoilers/philomena.html
+Winter's Tale||Spoilers/WintersTale.html
+Nebraska||Spoilers/Nebraska.html
+August: Osage County||Spoilers/AugustOsageCounty.html
+Jack Ryan: Shadow Recruit||Spoilers/JRshadowRecruit.html
