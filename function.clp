@@ -10,6 +10,7 @@
 ;; 		   2) If keyword appears in query, modify similarity value of movie
 ;; Note: modifying rule: term correlation
 (defrule text-matching
+	(phase (event UI_TopResult))
 	(question (event ?x))
 	?movie <- (movie (movieName ?z) (similarity ?w))
 	?keyword <- (keyword (word ?y) (movieName ?z) (number ?no) (check ?t&: (= ?t 0)))	
@@ -32,17 +33,22 @@
 	;;(loop-for-count 10
 		?result <- (result (movieName $?names))
 		(not (keyword (check ?t&: (= ?t 0))))
-		?movie <- (movie (movieName ?name) (inResult ?i &: (= ?i 0)) (similarity ?sim))
+		?movie <- (movie (movieName ?name) (inResult ?i &: (= ?i 0)) (similarity ?sim&: (> ?sim 0)))
 		(not (movie (inResult ?j &: (= ?j 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
 		=>
-		(slot-insert$ movie movieName 10 ?name)
+		;;(slot-insert$ movie movieName 10 ?name)
 		(modify ?movie (inResult 1))
-		(if (= (length$ $?name) 0)
+		(if (= (length$ $?names) 0 )
 			then 
+				(assert (result (movieName ?name)))
 			else 
-			(assert (result (movieName ?name)))
-		) 
-		;;(assert (result (movieName ?name "otherResults1")))
+				(assert (result (movieName $?names ?name)))
+		)
+		(retract ?result)
+
+
+
+
 	;;)
 	
 )
@@ -50,13 +56,13 @@
 
 ;; TODO: Remove this and put a corresponding title in UI
 ;; print result
-(defrule print-result
-	(result (movieName ?name $?other-names))
-	=>
-	(printout t "The movie you are looking for is: ")
-	(printout t ?name crlf)
-	
-)	
+;;(defrule print-result
+;;	(result (movieName ?name $?other-names))
+;;	=>
+;;	(printout t "The movie you are looking for is: ")
+;;	(printout t ?name crlf)
+;;	
+;;)	
 
 ;; STEP 4: Further process to narrow down result's list
 
