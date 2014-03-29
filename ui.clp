@@ -33,6 +33,8 @@
 	(bind ?n (read))
 	(if (= ?n 1) then
 		(printout t "I'm glad we were able to help." crlf)
+		(reset)
+		(run)
 	else
 		(printout t "Hold on while we search for other results..." crlf)
 		(modify ?phase (event UI_OtherResults))
@@ -45,14 +47,16 @@
 	?result <- (result (movieName $?x))
 	=>
 	(if (= 0 (length$ $?x)) then
-		(printout t "Looks like we have no more results in our list!" crlf)
-		(modify ?phase (event thirdQuestion))
+		(printout t "Looks like we couldn't find more results with the current keywords." crlf)
+		(modify ?phase (event UI_MoreKeywords))
 	else
 		(printout t "Is your movies one of these?" $?x crlf)
 		(printout t "1. yes 2. no" crlf)
 		(bind ?n (read))
 		(if (= ?n 1) then
-			(printout t "happy1" crlf)
+			(printout t "Great to know we could help!" crlf)
+			(reset)
+			(run)
 		else
 			(modify ?phase (event UI_MoreKeywords))
 		)
@@ -68,6 +72,7 @@
 	(bind ?newQuery (readline))
 	(if (= (str-length ?newQuery) 0) then 
 		(printout t "Apologies, we were not able to find your movie ***" crlf crlf)
+		(reset)
 		(run) 
 	)
 	(if (> (str-length ?newQuery) 0) then 
@@ -75,6 +80,17 @@
 		;; this cant work since all keywords are checked
 	)
 )
+
+
+;; Written to move phase back to getTopResult once resetKeyword and resetMovie have been run
+(defrule UIrecievedKeywords
+	?phase <- (phase (event UI_MoreKeywords))
+	(not (movie (similarity 0)))
+	(not (keywords (check 0)))
+	=>
+	(modify ?phase (event UI_TopResult))
+)
+
 
 ;;(batch "movieholic/main.bat")
 
