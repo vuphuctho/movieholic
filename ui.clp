@@ -5,15 +5,17 @@
 	;;(not (result))
 	?phase <- (phase (event UI_Welcome))
 	=>
-	(printout t "Welcome to Movieholic - an application for any holic of movie!" crlf)
-	(printout t "First, we need some information to find your favorite movie" crlf)
-	(printout t "Please enter an event in the movie (keywords only): ")
+	(printout t "************************************************************************" crlf)
+	(printout t "** Welcome to Movieholic - an application for any holic of movie! **" crlf)
+	(printout t "** First, we need some information to find your favorite movie." crlf)
+	(printout t "** Please enter an event in the movie (keywords only): " crlf)
+	(printout t "** At anytime press enter without anything to exit." crlf)
+	(printout t "************************************************************************" crlf)
 	(bind ?n (readline))
 	(if (= (str-length ?n) 0)
 		then 
-			(printout t "Sorry, we need some information to start processing ***" crlf crlf)
-			(reset)
-			(run) 
+			(printout t "Thank you for using Movieholic!" crlf)
+			(halt) 
 	)
 	(if (> (str-length ?n) 0)
 		then 
@@ -34,10 +36,13 @@
 		(printout t "I'm glad we were able to help." crlf)
 		(reset)
 		(run)
-	else
+	)
+	(if (= ?n 2) then
 		(printout t "Hold on while we search for other results..." crlf)
 		(modify ?phase (event UI_OtherResults))
 		(modify ?result (movieName (rest$ $?x)))
+	else
+		(halt)
 	)
 )
 
@@ -56,8 +61,11 @@
 			(printout t "Great to know we could help!" crlf)
 			(reset)
 			(run)
-		else
+		)
+		(if (= ?n 1) then
 			(modify ?phase (event UI_MoreKeywords))
+		else
+			(halt)
 		)
 	)
 )
@@ -71,8 +79,7 @@
 	(bind ?newQuery (readline))
 	(if (= (str-length ?newQuery) 0) then 
 		(printout t "Apologies, we were not able to find your movie ***" crlf crlf)
-		(reset)
-		(run) 
+		(halt)
 	)
 	(if (> (str-length ?newQuery) 0) then 
 		(modify ?question (event (str-cat ?newQuery(str-cat " " ?originalQuery))))
