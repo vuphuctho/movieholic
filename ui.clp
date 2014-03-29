@@ -27,7 +27,6 @@
 	?phase <- (phase (event UI_TopResult))
 	?result <- (result (movieName $?x&: (> (length $?x ) 0)))
 	=>
-	(facts)
 	(printout t "Is the movie you are looking for " (nth$ 1 $?x) crlf)
 	(printout t "1. Yes 2. No" crlf)
 	(bind ?n (read))

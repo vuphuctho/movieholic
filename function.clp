@@ -30,35 +30,24 @@
 ;; JOHN : To return results as a list
 ;; get top result
 (defrule get-result
-	;;(loop-for-count 10
-		?result <- (result (movieName $?names))
-		(not (keyword (check ?t&: (= ?t 0))))
-		?movie <- (movie (movieName ?name) (inResult ?i &: (= ?i 0)) (similarity ?sim&: (> ?sim 0)))
-		(not (movie (inResult ?j &: (= ?j 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
+		(phase (event UI_TopResult))
+		?result <- (result (movieName $?names) (loop ?l))
+		(not (keyword (check 0)))
+		?movie <- (movie (movieName ?name) (inResult 0) (similarity ?sim))
+		(not (movie (inResult 0) (similarity ?other_sim&: (> ?other_sim ?sim ))))
 		=>
-		;;(slot-insert$ movie movieName 10 ?name)
-		(printout "Fire rule get-result" crlf)
-		(modify ?movie (inResult 1))
-		(if (not (?result))
-			then 
-				(printout t "Get here" crlf)
-				(assert (result (movieName ?name)))
-			else 
-				(if (= (length$ $?names) 0 )
-					then 
-						(assert (result (movieName ?name)))
-					else 
-						(assert (result (movieName $?names ?name)))
-				)
-		(retract ?result)
+		(if (> ?sim 0)
+			then
+			(modify ?movie (inResult 1))
+			(if (= (length$ $?names) 0)
+				then 
+				(assert (result (movieName ?name) (loop (+ ?l 1))))
+				
+				else 
+				(assert (result (movieName $?name ?name) (loop (+ ?l 1))))
+			)
+			(retract ?result)
 		)
-		
-
-
-
-
-	;;)
-	
 )
 
 

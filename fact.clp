@@ -12,6 +12,9 @@
 	(keyword (word "Jack") (movieName "Titanic") (number 15))
 	(keyword (word "love") (movieName "Titanic") (number 6))
 	;; (keyword (word "") (movieName "") (number ))
+
+	;; init result
+	(result)
 	
 	;; facts to set-up user-interface
 	;; UI_Welcome UI_TopResult, UI_OtherResults, UIMoreKeywords, UIFoundMovie
