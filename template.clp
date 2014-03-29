@@ -17,6 +17,11 @@
 (deftemplate question
 	(slot event (type STRING)))
 
+;; TODO Change this to a list!!!
 ;; result template
 (deftemplate result
-	(slot movieName (type STRING)))
+	(multislot movieName (type STRING)))
+	
+;; user-interface template
+(deftemplate phase
+	(slot event (type SYMBOL)))
