@@ -27,22 +27,29 @@
 ;; TODO handle empty list IF an empty result is asserted
 (defrule UItopResult
 	?phase <- (phase (event UI_TopResult))
-	?result <- (result (movieName $?x&: (> (length $?x ) 0)))
+	?result <- (result (movieName $?x) (loop 10))
 	=>
-	(printout t "Is the movie you are looking for " (nth$ 1 $?x) crlf)
-	(printout t "1. Yes 2. No" crlf)
-	(bind ?n (read))
-	(if (= ?n 1) then
-		(printout t "I'm glad we were able to help." crlf)
-		(reset)
-		(run)
-	)
-	(if (= ?n 2) then
-		(printout t "Hold on while we search for other results..." crlf)
-		(modify ?phase (event UI_OtherResults))
-		(modify ?result (movieName (rest$ $?x)))
-	else
-		(halt)
+	(if (> (length$ $?x) 0) 
+		then 
+		(printout t "Is the movie you are looking for " (nth$ 1 $?x) crlf)
+		(printout t "1. Yes 2. No" crlf)
+		(bind ?n (read))
+		(if (= ?n 1) then
+			(printout t "I'm glad we were able to help." crlf)
+			(reset)
+			(run)
+		)
+		(if (= ?n 2) 
+			then
+			(printout t "Hold on while we search for other results..." crlf)
+			(modify ?phase (event UI_OtherResults))
+			(modify ?result (movieName (rest$ $?x)))
+			else
+			(halt)
+		)
+		else
+		(printout t "Looks like we couldn't find any result with the current keywords." crlf)
+		(modify ?phase (event UI_MoreKeywords))
 	)
 )
 
@@ -73,6 +80,8 @@
 (defrule UImoreKeywords
 	?phase <- (phase (event UI_MoreKeywords))
 	?question <- (question (event ?originalQuery))
+	(not (movie (inResult 1)))
+	(not (keyword (check 1)))
 	=>
 	(printout t "Could we please get more keywords from you?" crlf)
 	(printout t "(Press enter without anything to exit.)" crlf)
@@ -83,20 +92,10 @@
 	)
 	(if (> (str-length ?newQuery) 0) then 
 		(modify ?question (event (str-cat ?newQuery(str-cat " " ?originalQuery))))
+		(modify ?phase (event UI_TopResult))
 		;; this cant work since all keywords are checked
-	)
+	)	
 )
-
-
-;; Written to move phase back to getTopResult once resetKeyword and resetMovie have been run
-(defrule UIrecievedKeywords
-	?phase <- (phase (event UI_MoreKeywords))
-	(not (movie (similarity 0)))
-	(not (keyword (check 0)))
-	=>
-	(modify ?phase (event UI_TopResult))
-)
-
 
 ;;(batch "movieholic/main.bat")
 
