@@ -20,7 +20,7 @@
 
 	;; If find keyword in query
 	;; modify similarity value of movie having this keyword
-	(if (str-index ?y ?x)
+	(if (str-index (lowcase ?y) (lowcase ?x))
 		then	
 		(modify ?movie (similarity (+ ?w ?no)))
 	)
@@ -38,7 +38,7 @@
 		=>
 		(if (> ?sim 0)
 			then
-			(printout t "The movie " ?name " is added to the result list" crlf)
+			;;(printout t "The movie " ?name " is added to the result list" crlf)
 			(modify ?movie (inResult 1))
 			(if (= (length$ $?names) 0)
 				then 
@@ -51,7 +51,7 @@
 			(retract ?result)
 			else 
 			;; still update loop value
-			(printout t "No movie is added " crlf)
+			;;(printout t "No movie is added " crlf)
 			(modify ?result (loop (+ ?l 1))) 
 		)
 )
