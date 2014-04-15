@@ -21,7 +21,9 @@
 ;; TODO Change this to a list!!!
 ;; result template
 (deftemplate result
-	(multislot movieName (type STRING)))
+	(multislot movieName (type STRING))
+	(slot loop (type NUMBER) (default 0))
+)
 	
 ;; user-interface template
 (deftemplate phase

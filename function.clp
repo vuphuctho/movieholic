@@ -3,13 +3,17 @@
 ;; STEP 1: QUERY PREPROCESSING
 
 ;; STEP 2: TEXT-MATCHING AND SIMILARITY MEASUREMENT	
+
 ;; Rule: text matching
-;; Premise: if there exists query, find an unchecked keyword (check = 0)
-;; and its corresponding movie
-;; Action: 1) Match keyword as checked (check = 1)
-;; 		   2) If keyword appears in query, modify similarity value of movie
+;; Premise:
+;;		1) Query exists
+;;		2) Unchecked keyword (check = 0) exists
+;; Action: 
+;;		1) Match keyword as checked (check = 1)
+;; 		2) If keyword appears in query, modify similarity value of movie
 ;; Note: modifying rule: term correlation
 (defrule text-matching
+	(phase (event UI_TopResult))
 	(question (event ?x))
 	?movie <- (movie (movieName ?z) (similarity ?w))
 	?keyword <- (keyword (word ?y) (movieName ?z) (number ?no) (check ?t&: (= ?t 0)))	
@@ -19,50 +23,93 @@
 
 	;; If find keyword in query
 	;; modify similarity value of movie having this keyword
-	(if (str-index ?y ?x)
+	(if (str-index (lowcase ?y) (lowcase ?x))
 		then	
 		(modify ?movie (similarity (+ ?w ?no)))
 	)
 )
 
 ;; STEP 3: RETRIEVE RESULTS
-;; JOHN : To return results as a list
-;; get top result
+;; get top 10 results with similarity > 0
+;; Premise:
+;;		1) Result's size < 10
+;;		2) All keywords are checked (check = 1)
+;;		3) Movie with highest similarity and is not in result (inResult = 0) exists
+;; Action:
+;;		If movie's similarity > 0
+;;			Add the movie to result, update movie (inResult=1), update result's size
+;;		Else
+;;			Only update result's size
 (defrule get-result
-	;;(loop-for-count 10
-		?result <- (result (movieName $?names))
-		(not (keyword (check ?t&: (= ?t 0))))
-		?movie <- (movie (movieName ?name) (inResult ?i &: (= ?i 0)) (similarity ?sim))
-		(not (movie (inResult ?j &: (= ?j 0)) (similarity ?other_sim&: (> ?other_sim ?sim ))))
+		?result <- (result (movieName $?names) (loop ?l&: (< ?l 10)))
+		(not (keyword (check 0)))
+		?movie <- (movie (movieName ?name) (inResult 0) (similarity ?sim))
+		(not (movie (inResult 0) (similarity ?other_sim&: (> ?other_sim ?sim ))))
 		=>
-		(slot-insert$ movie movieName 10 ?name)
-		(modify ?movie (inResult 1))
-		(if (= (length$ $?name) 0)
-			then 
+		(if (> ?sim 0)
+			then
+			(modify ?movie (inResult 1))
+			(if (= (length$ $?names) 0)
+				then 	
+				(assert (result (movieName ?name) (loop (+ ?l 1))))				
+				else 
+				(assert (result (movieName $?name ?name) (loop (+ ?l 1))))
+			)
+			(retract ?result)
 			else 
-			(assert (result (movieName ?name)))
-		) 
-		;;(assert (result (movieName ?name "otherResults1")))
-	;;)
-	
+			(modify ?result (loop (+ ?l 1))) 
+		)
 )
 
 
-;; TODO: Remove this and put a corresponding title in UI
-;; print result
-(defrule print-result
-	(result (movieName ?name $?other-names))
+;; Reset data
+
+;; Reset keywords
+;; Premise:
+;;		1) Phase: UI_MoreKeywords
+;;		2) Checked keyword (check = 1) exists
+;; Action:
+;;		Reset keyword (check = 0)
+(defrule reset-keyword
+	;; keep high salience
+	(declare (salience 20))
+	(phase (event UI_MoreKeywords))
+	?keyword <- (keyword (check 1))
 	=>
-	(printout t "The movie you are looking for is: ")
-	(printout t ?name crlf)
-	
-)	
+	(modify ?keyword (check 0))
+)
 
-;; STEP 4: Further process to narrow down result's list
+;; Reset movies in result
+;; Premise:
+;;		1) Phase: UI_MoreKeywords
+;;		2) Movie in result (inResult = 1) exists
+;; Action:
+;;		1) Reset movie (inResult = 0)
+;; 		2) Set this movie to low priority (similarity = -100)
+(defrule reset-movie
+	;; keep high salience
+	(declare (salience 20))
+	(phase (event UI_MoreKeywords))
+	?movie <- (movie (inResult 1) (similarity ?y))
+	=>
+	;; make this movie in low priority 
+	;; since it is not what user want to find
+	(modify ?movie (inResult 0) (similarity -100)) 	
+)
 
-
-;;(defrule print-result
-;;	(result (movieName ?firstMovie $?))
-;;	=>
-;;	(printout t "The movie you are looking for is: " ?firstMovie "." crlf)
-;;)	
+;; Reset result
+;; Premise:
+;;		1) Phase: UI_MoreKeywords
+;;		2) Result's size = 10 (loop = 10)
+;; Action:
+;;		Reset result's list of movies and its size
+(defrule reset-result
+	;; keep high salience
+	(declare (salience 20))
+	(phase (event UI_MoreKeywords))
+	?result <- (result (loop 10))
+	=>
+	;; reset the whole result list
+	(assert (result))
+	(retract ?result)
+)

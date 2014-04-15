@@ -1,5 +1,12 @@
 ;; Facts
 (deffacts initial-facts
+	(movie (movieName "Titanic"))
+	(keyword (word "ship") (movieName "Titanic") (number 10))
+	(keyword (word "sink") (movieName "Titanic") (number 8))
+	(keyword (word "Titanic") (movieName "Titanic") (number 17))
+	(keyword (word "Rose") (movieName "Titanic") (number 14))
+	(keyword (word "Jack") (movieName "Titanic") (number 15))
+	(keyword (word "love") (movieName "Titanic") (number 6))
 	
 	(movie (movieName "The Wolf of Wall Street"))
 	(keyword (word "wall") (movieName "The Wolf of Wall Street") (number 10))
@@ -12953,10 +12960,11 @@
 	(keyword (word "blood") (movieName "The Hunger Games: Catching Fire") (number 2))
 	(keyword (word "train") (movieName "The Hunger Games: Catching Fire") (number 2))
 
+	;; init result
+	(result)
+
 	;; facts to set-up user-interface
 	;; UI_Welcome UI_TopResult, UI_OtherResults, UIMoreKeywords, UIFoundMovie
 	(phase (event UI_Welcome))
-
-	(result)
 )
 
