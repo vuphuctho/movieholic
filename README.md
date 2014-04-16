@@ -5,7 +5,7 @@ Introduction
 ============
 An application for movie searching. User can type in any event happening in the movie. The application will search in the database and retrieve the movie whose content is closest to the hint given.
 
-Source of movie's content: http://www.themoviespoiler.com/
+Source of movie's content: http://www.themoviespoiler.com/ and http://www.imdb.com/
 
 The system is built on CLIPS Expert System Language.
 
