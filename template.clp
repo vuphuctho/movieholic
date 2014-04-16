@@ -18,13 +18,17 @@
 (deftemplate question
 	(slot event (type STRING)))
 
-;; TODO Change this to a list!!!
 ;; result template
 (deftemplate result
 	(multislot movieName (type STRING))
 	(slot loop (type NUMBER) (default 0))
 )
 	
+;; stopword template
+(deftemplate stopword
+	(slot word (type STRING))
+)
+
 ;; user-interface template
 (deftemplate phase
 	(slot event (type SYMBOL)))
