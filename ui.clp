@@ -47,11 +47,11 @@
 ;;        - Reply and change phase to UI_MoreKeywords
 (defrule UItopResult
   ?phase <- (phase (event UI_TopResult))
-  ?result <- (result (movieName $?x ?y) (loop 10))
+  ?result <- (result (movieName $?x) (loop 10))
   =>
   (if (> (length$ $?x) 0) 
     then 
-    (printout t "Is the movie you are looking for " (nth$ (length$ $?x) $?x) crlf)
+    (printout t "Is the movie you are looking for " (nth$ 1 $?x) crlf)
     (printout t "1. Yes 2. No" crlf)
     (bind ?n (read))
     (if (= ?n 1) then
