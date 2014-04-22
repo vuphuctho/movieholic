@@ -33,7 +33,6 @@
 	;; modify similarity value of movie having this keyword
 	(if (str-index (lowcase ?y) (lowcase ?x))
 		then	
-		(printout t "Find keyword " ?y " in movie " ?x crlf)
 		(modify ?movie (similarity (+ ?w ?no)))
 	)
 )
@@ -58,12 +57,11 @@
 		(if (> ?sim 0)
 			then
 			(modify ?movie (inResult 1))
-			(printout t "add movie " ?name " with " ?sim crlf)
 			(if (= (length$ $?names) 0)
 				then 	
 				(assert (result (movieName ?name) (loop (+ ?l 1))))				
 				else 
-				(assert (result (movieName $?name ?name) (loop (+ ?l 1))))
+				(assert (result (movieName $?names ?name) (loop (+ ?l 1))))
 			)
 			else 
 			(modify ?result (loop (+ ?l 1))) 
