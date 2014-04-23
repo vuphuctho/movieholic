@@ -54,22 +54,22 @@
     (printout t "Is the movie you are looking for " ?name crlf)
     (printout t "1. Yes 2. No" crlf)
     (bind ?n (read))
-    (if (= ?n 1) then
-      (printout t "I'm glad we were able to help." crlf)
-      (reset)
-      (run)
-    )
-    (if (= ?n 2) 
+    (if (= ?n 1) 
       then
-      (printout t "Hold on while we search for other results..." crlf)
-      (modify ?phase (event UI_OtherResults))
-      (modify ?result (movieName $?names))
-      else
-      (halt)
+        (printout t "I'm glad we were able to help." crlf)
+        (reset)
+        (run)
+      else 
+      (if (= ?n 2) 
+        then
+          (printout t "Hold on while we search for other results..." crlf)
+          (modify ?phase (event UI_OtherResults))
+          (modify ?result (movieName $?names))
+        else
+          (printout t "Looks like we couldn't find any result with the current keywords." crlf)
+          (modify ?phase (event UI_MoreKeywords))
+      )
     )
-    else
-    (printout t "Looks like we couldn't find any result with the current keywords." crlf)
-    (modify ?phase (event UI_MoreKeywords))
   )
 )
 
@@ -100,7 +100,7 @@
       (reset)
       (run)
     )
-    (if (= ?n 1) then
+    (if (= ?n 2) then
       (modify ?phase (event UI_MoreKeywords))
     else
       (halt)

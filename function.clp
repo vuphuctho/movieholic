@@ -59,9 +59,11 @@
 			(modify ?movie (inResult 1))
 			(if (= (length$ $?names) 0)
 				then 	
-				(assert (result (movieName ?name) (loop (+ ?l 1))))				
-				else 
+				(assert (result (movieName ?name) (loop (+ ?l 1))))	
+				(retract ?result)			
+				else
 				(assert (result (movieName $?names ?name) (loop (+ ?l 1))))
+				(retract ?result)			
 			)
 			else 
 			(modify ?result (loop (+ ?l 1))) 
@@ -101,7 +103,7 @@
 	=>
 	;; make this movie in low priority 
 	;; since it is not what user want to find
-	(modify ?movie (inResult 0) (similarity -100)) 	
+	(modify ?movie (inResult 0) (similarity -20)) 	
 )
 
 ;; Reset result
@@ -117,6 +119,6 @@
 	?result <- (result (loop 10))
 	=>
 	;; reset the whole result list
-	(assert (result))
 	(retract ?result)
+	(assert (result))
 )
